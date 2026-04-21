@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Home Page - Bangla Taka Converter (Bidirectional)
  * 

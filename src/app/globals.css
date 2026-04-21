@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -57,17 +58,17 @@
   --primary-foreground: #F0FDFA;
   --sidebar-primary: #0D6B62;
   --sidebar-primary-foreground: #F0FDFA;
-  
+
   /* Chart Colors - Gradient from teal to indigo */
   --chart-1: #06B6D4;
   --chart-2: #0891B2;
   --chart-3: #0E7490;
   --chart-4: #0F766E;
   --chart-5: #164E63;
-  
+
   /* Radius - Balanced for modern minimalist aesthetic */
   --radius: 0.75rem;
-  
+
   /* Background & Foreground - Clean, light palette */
   --background: #FFFFFF;
   --foreground: #1F2937;
@@ -75,28 +76,28 @@
   --card-foreground: #1F2937;
   --popover: #FFFFFF;
   --popover-foreground: #1F2937;
-  
+
   /* Secondary - Soft gray for subtle elements */
   --secondary: #F3F4F6;
   --secondary-foreground: #374151;
-  
+
   /* Muted - Light gray for disabled/inactive states */
   --muted: #E5E7EB;
   --muted-foreground: #6B7280;
-  
+
   /* Accent - Vibrant emerald for success and positive actions */
   --accent: #10B981;
   --accent-foreground: #FFFFFF;
-  
+
   /* Destructive - Red for errors */
   --destructive: #EF4444;
   --destructive-foreground: #FFFFFF;
-  
+
   /* Border & Input - Subtle gray borders */
   --border: #E5E7EB;
   --input: #F9FAFB;
   --ring: #0F766E;
-  
+
   /* Sidebar - Light background */
   --sidebar: #FFFFFF;
   --sidebar-foreground: #1F2937;
@@ -159,25 +160,30 @@
   input[type="radio"]:not(:disabled) {
     @apply cursor-pointer;
   }
-  
+
   /* Typography - Modern Minimalist */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-bold tracking-tight;
-    font-family: 'Playfair Display', serif;
+    font-family: "Playfair Display", serif;
   }
-  
+
   h1 {
     @apply text-4xl md:text-5xl lg:text-6xl;
   }
-  
+
   h2 {
     @apply text-3xl md:text-4xl;
   }
-  
+
   h3 {
     @apply text-2xl md:text-3xl;
   }
-  
+
   /* Input Focus - Gradient border effect */
   input:focus,
   textarea:focus,
@@ -217,27 +223,22 @@
       max-width: 1280px;
     }
   }
-  
+
   /* Gradient Background Utility */
   .gradient-bg {
     @apply bg-gradient-to-br from-primary via-cyan-600 to-primary;
   }
-  
+
   /* Gradient Text Utility */
   .gradient-text {
     @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
   }
-  
-
 }
-
-/* Import Google Fonts for typography */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 
 /* Font Family Definitions */
 :root {
-  --font-display: 'Playfair Display', serif;
-  --font-body: 'Inter', sans-serif;
+  --font-display: "Playfair Display", serif;
+  --font-body: "Inter", sans-serif;
 }
 
 body {
