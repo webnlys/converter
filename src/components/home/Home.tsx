@@ -442,7 +442,7 @@ export default function Home() {
           <p className="text-sm text-slate-600">
             Bangla In Words Converter • সংখ্যা ↔ কথায়  রূপান্তর • 
             <span>
-              Designed and Developed by <a href="https://.com" target="_blank" rel="noopener noreferrer" className="text-emerald-600">Webnlys</a>
+              Designed and Developed by <a href="https://webnlys.com" target="_blank" rel="noopener noreferrer" className="text-emerald-600">Webnlys.com</a>
             </span>
           </p>
         </div>
