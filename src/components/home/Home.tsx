@@ -199,7 +199,7 @@ export default function Home() {
           </h3> 
            
           <p className="text-lg text-slate-600">
-            যেকোনো পরিমাণ ইংরেজি ও বাংলায় কথায়—লক্ষ–কোটি–পয়সা ফরম্যাট ও অনুলিপি এক ক্লিকে
+            যেকোনো পরিমাণ ইংরেজি ও বাংলায় কথায়—লক্ষ–কোটি–পয়সা ফরম্যাট ও  কপি করুন এক ক্লিকে
           </p>
         </div>
 
@@ -341,7 +341,7 @@ export default function Home() {
                     className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
                   >
                     <Copy className="mr-2 h-4 w-4" />
-                    অনুলিপি করুন
+                    কপি করুন
                   </Button>
                 </div>
               </div>
@@ -442,7 +442,7 @@ export default function Home() {
           <p className="text-sm text-slate-600">
             Bangla In Words Converter • সংখ্যা ↔ কথায়  রূপান্তর • 
             <span>
-              Designed and Developed by <a href="https://webnlyst.com" target="_blank" rel="noopener noreferrer" className="text-emerald-600">Webnlys</a>
+              Designed and Developed by <a href="https://.com" target="_blank" rel="noopener noreferrer" className="text-emerald-600">Webnlys</a>
             </span>
           </p>
         </div>
