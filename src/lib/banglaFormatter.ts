@@ -75,6 +75,50 @@ export function formatBanglaComma(amount: number | string): string {
   return decimalPart ? `${formatted}.${decimalPart}` : formatted;
 }
 
+/**
+ * Western/international grouping (every three digits): e.g. 2300 → "2,300"; 11165500 → "11,165,500".
+ */
+export function formatWesternComma(amount: number): string {
+  if (!Number.isFinite(amount)) return "";
+  const rounded = Math.round(amount * 100) / 100;
+  if (rounded === Math.floor(rounded)) {
+    return rounded.toLocaleString("en-US", { maximumFractionDigits: 0 });
+  }
+  return rounded.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
+/**
+ * Indian/Bangladesh comma placement ({@link formatBanglaComma}) with Bengali numerals (২,৩০০).
+ */
+export function formatBanglaCommaBnDigits(amount: number): string {
+  const rounded = Math.round(amount * 100) / 100;
+  const ascii =
+    rounded === Math.floor(rounded)
+      ? formatBanglaComma(Math.trunc(rounded))
+      : formatBanglaComma(rounded.toFixed(2));
+  return englishToBanglaDigits(ascii);
+}
+
+/** Strip paired wrappers like `"2300"` / `'2300'` / `"..."` (ASCII + common curly quotes). */
+function stripOuterQuotes(s: string): string {
+  let t = s.trim();
+  while (t.length >= 2) {
+    const a = t[0];
+    const b = t[t.length - 1];
+    const paired =
+      (a === '"' && b === '"') ||
+      (a === "'" && b === "'") ||
+      (a === "\u201C" && b === "\u201D") ||
+      (a === "\u2018" && b === "\u2019");
+    if (!paired) break;
+    t = t.slice(1, -1).trim();
+  }
+  return t;
+}
+
 /** Parsed amount: exact integer taka (digit string) and paise 0–99 (no float rounding). */
 export interface ParsedCurrency {
   /** Integer taka, digits only, no leading zeros except `"0"` */
@@ -89,6 +133,9 @@ export interface ParsedCurrency {
  */
 export function parseCurrencyInput(input: string): ParsedCurrency | null {
   let cleaned = input.trim();
+  if (!cleaned) return null;
+
+  cleaned = stripOuterQuotes(cleaned);
   if (!cleaned) return null;
 
   cleaned = banglaToBanglaDigits(cleaned);

@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Home Page - Bangla Taka Converter (Bidirectional)
+ * Home Page - Bangla In Words Converter (Bidirectional)
  * 
  * Design Philosophy: Modern Minimalist with Gradient Accents
  * - Bidirectional conversion: Number ↔ Text
@@ -20,8 +20,8 @@ import {
   convertToBangla,
   parseCurrencyInput,
 } from "@/lib/currencyConverter";
-import { formatCurrencyDisplay } from "@/lib/banglaFormatter";
-import { convertTextToNumber, detectLanguage } from "@/lib/reverseConverter";
+import { formatCurrencyDisplay, formatWesternComma, formatBanglaCommaBnDigits } from "@/lib/banglaFormatter";
+import { convertTextToNumber } from "@/lib/reverseConverter";
 
 interface ConversionResult {
   english: string;
@@ -30,8 +30,8 @@ interface ConversionResult {
 }
 
 interface ReverseConversionResult {
-  amount: number;
-  formattedAmount: string;
+  englishFormat: string;
+  banglaFormat: string;
 }
 
 type ConversionMode = "number-to-text" | "text-to-number";
@@ -102,11 +102,9 @@ export default function Home() {
         setReverseConversions(null);
         toast.error("Could not parse the text. Please enter valid Bangla Taka words.");
       } else {
-        const formattedAmount = formatCurrencyDisplay(parsedNumber);
-
         setReverseConversions({
-          amount: parsedNumber,
-          formattedAmount,
+          englishFormat: formatWesternComma(parsedNumber),
+          banglaFormat: formatBanglaCommaBnDigits(parsedNumber),
         });
 
         incrementConversionCount();
@@ -170,8 +168,12 @@ export default function Home() {
               ৳
             </div>
             <div>
-              <h1 className="text-xl font-bold text-slate-900">Taka Converter</h1>
-              <p className="text-xs text-slate-500">Numbers to Words</p>
+              <h1 className="text-xl font-bold text-slate-900">
+                Bangla In Words Converter
+              </h1>
+              <p className="text-xs text-slate-600">
+                টাকার অংক/সংখা কথায় লিখুন
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5">
@@ -188,10 +190,16 @@ export default function Home() {
         {/* Hero Section */}
         <div className="mb-12 text-center">
           <h2 className="mb-3 text-4xl font-bold text-slate-900">
-            Convert Currency <span className="text-emerald-600">to Words</span>
-          </h2>
+            টাকার সংখ্যা{" "}
+            <span className="text-emerald-600">কথায় লিখুন</span>
+          </h2> 
+          <h3 className="mb-3 text-4xl font-bold text-slate-900">
+            Convert amount{" "}
+            <span className="text-emerald-600">in English and Bangla into words.</span>
+          </h3> 
+           
           <p className="text-lg text-slate-600">
-            Enter any amount and get instant conversion in English & Bangla
+            যেকোনো পরিমাণ ইংরেজি ও বাংলায় কথায়—লক্ষ–কোটি–পয়সা ফরম্যাট ও অনুলিপি এক ক্লিকে
           </p>
         </div>
 
@@ -352,45 +360,49 @@ export default function Home() {
           <>
             {reverseConversions ? (
               <div className="grid gap-6 md:grid-cols-2">
-                {/* Numeric Result */}
+                {/* English-style grouping */}
                 <div className="rounded-xl border border-purple-200 bg-purple-50 p-6">
                   <div className="mb-4 flex items-center gap-2">
                     <span className="text-2xl">🔢</span>
-                    <h3 className="font-bold text-slate-900">Numeric Format</h3>
+                    <h3 className="font-bold text-slate-900">English Format</h3>
                   </div>
                   <div className="mb-4">
-                    <p className="text-sm text-slate-600 mb-2">Amount:</p>
+                    <p className="text-sm text-slate-600 mb-2">
+                      Western grouping (every three digits):
+                    </p>
                     <p className="text-3xl font-bold text-purple-600">
-                      {reverseConversions.amount.toLocaleString()}
+                      {reverseConversions.englishFormat}
                     </p>
                   </div>
                   <Button
-                    onClick={() => handleCopy(reverseConversions.amount.toString())}
+                    onClick={() => handleCopy(reverseConversions.englishFormat)}
                     className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
                   >
                     <Copy className="mr-2 h-4 w-4" />
-                    Copy Number
+                    Copy English Format
                   </Button>
                 </div>
 
-                {/* Bangla Format Result */}
+                {/* Bangla lac–crore comma style + Bengali digits */}
                 <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-6">
                   <div className="mb-4 flex items-center gap-2">
                     <span className="text-2xl">👉</span>
                     <h3 className="font-bold text-slate-900">Bangla Format</h3>
                   </div>
                   <div className="mb-4">
-                    <p className="text-sm text-slate-600 mb-2">With Bangla Commas:</p>
+                    <p className="text-sm text-slate-600 mb-2">
+                      Bangladesh-style commas + Bengali numerals:
+                    </p>
                     <p className="text-3xl font-bold text-indigo-600">
-                      {reverseConversions.formattedAmount}
+                      {reverseConversions.banglaFormat}
                     </p>
                   </div>
                   <Button
-                    onClick={() => handleCopy(reverseConversions.formattedAmount)}
+                    onClick={() => handleCopy(reverseConversions.banglaFormat)}
                     className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
                   >
                     <Copy className="mr-2 h-4 w-4" />
-                    Copy Format
+                    Copy Bangla Format
                   </Button>
                 </div>
               </div>
@@ -428,7 +440,10 @@ export default function Home() {
       <footer className="relative z-10 border-t border-slate-200 bg-white/80 backdrop-blur-sm py-6 mt-12">
         <div className="container mx-auto px-4 text-center">
           <p className="text-sm text-slate-600">
-            Bangla Taka Converter • Bidirectional Number ↔ Text Conversion
+            Bangla In Words Converter • সংখ্যা ↔ কথায়  রূপান্তর • 
+            <span>
+              Designed and Developed by <a href="https://webnlyst.com" target="_blank" rel="noopener noreferrer" className="text-emerald-600">Webnlys</a>
+            </span>
           </p>
         </div>
       </footer>

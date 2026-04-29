@@ -97,7 +97,7 @@ const banglaWordMap: { [key: string]: number } = {
   কোটি: 10000000,
   টাকা: 1,
   পয়সা: 0.01,
-  
+
   // Compound hundreds (for cases like "তিনশত" instead of "তিন শত")
   একশত: 100,
   দুইশত: 200,
@@ -109,6 +109,19 @@ const banglaWordMap: { [key: string]: number } = {
   আটশত: 800,
   নয়শত: 900,
 };
+
+/** Compound hundreds like তিনশত (300): add atomically; do not treat as শত multiplier. */
+const BANGLA_ATOMIC_HUNDREDS = new Set([
+  "একশত",
+  "দুইশত",
+  "তিনশত",
+  "চারশত",
+  "পাঁচশত",
+  "ছয়শত",
+  "সাতশত",
+  "আটশত",
+  "নয়শত",
+]);
 
 /**
  * Parse English text to number with correct scale handling
@@ -134,6 +147,7 @@ export function parseEnglishText(text: string): number | null {
     .replace(/\btaka\b/g, " ")
     .replace(/\bpaisa\b/g, " ")
     .replace(/\bmatra\b/g, " ")
+    .replace(/\bonly\b/g, " ")
     .replace(/\s+/g, " ")
     .trim();
 
@@ -216,6 +230,11 @@ export function parseBanglaText(text: string): number | null {
 
     if (value === undefined) {
       // Unknown word, skip
+      continue;
+    }
+
+    if (BANGLA_ATOMIC_HUNDREDS.has(word)) {
+      current += value;
       continue;
     }
 
