@@ -40,6 +40,9 @@ export const metadata: Metadata = {
   applicationName: "Bangla In Words Converter",
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
   category: "finance",
+  verification: {
+    google: "wPZtgxGlObmFLdD1sL3jPeLabHE3gHcUagL3tnddoVs",
+  },
   alternates: {
     canonical: SITE_URL,
     languages: {
