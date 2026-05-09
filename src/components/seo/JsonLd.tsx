@@ -1,3 +1,4 @@
+import { SEO_FAQ_ITEMS } from "@/lib/faqContent";
 import { getSiteUrl } from "@/lib/site";
 
 const SITE_URL = getSiteUrl();
@@ -31,6 +32,8 @@ const schema = {
       alternateName: [
         "টাকার অংক/সংখা কথায় লিখুন",
         "Bangladesh Taka Amount to Words",
+        "taka in words",
+        "amount to words bd",
       ],
       description:
         "বাংলাদেশি টাকার সংখ্যাকে ইংরেজি ও বাংলায় কথায় রূপান্তর করুন। টেক্সট থেকে সংখ্যায় ও বিপরীত রূপান্তর। ফ্রি অনলাইন টুল।",
@@ -67,6 +70,19 @@ const schema = {
       },
       inLanguage: ["bn-BD", "en"],
       isAccessibleForFree: true,
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${SITE_URL}/#faq`,
+      url: SITE_URL,
+      mainEntity: SEO_FAQ_ITEMS.map((item) => ({
+        "@type": "Question",
+        name: item.schema.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.schema.answer,
+        },
+      })),
     },
   ],
 };

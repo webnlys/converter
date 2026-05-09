@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 /**
  * Home Page - Bangla In Words Converter (Bidirectional)
  * 
@@ -22,6 +24,11 @@ import {
 } from "@/lib/currencyConverter";
 import { formatCurrencyDisplay, formatWesternComma, formatBanglaCommaBnDigits } from "@/lib/banglaFormatter";
 import { convertTextToNumber } from "@/lib/reverseConverter";
+import { SEO_FAQ_ITEMS } from "@/lib/faqContent";
+import {
+  formatWesternCommaDigits,
+  PROGRAMMATIC_HOME_HIGHLIGHTS,
+} from "@/lib/programmaticTakaPages";
 
 interface ConversionResult {
   english: string;
@@ -415,6 +422,74 @@ export default function Home() {
             )}
           </>
         )}
+
+        {/* Visible FAQ — Banglish + BN intent; wording synced with FAQ JSON-LD */}
+        <section
+          id="faq"
+          aria-labelledby="faq-a11y-title"
+          className="mt-16 scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-8 shadow-sm md:p-10"
+        >
+          <p id="faq-a11y-title" className="sr-only">
+            Short answers for search and AI overviews — taka in words, cheque lekhar
+            niyom, amount to words BD
+          </p>
+          <div className="space-y-10">
+            {SEO_FAQ_ITEMS.map((item) => (
+              <div key={item.schema.question} className="space-y-8">
+                {item.blocks.map((block) => (
+                  <article key={block.heading}>
+                    <h2 className="mb-3 text-xl font-semibold leading-snug text-slate-900 md:text-2xl">
+                      {block.heading}
+                    </h2>
+                    {block.paragraphs.map((para, pi) => (
+                      <p
+                        key={pi}
+                        className="mb-3 text-base leading-relaxed text-slate-700 last:mb-0"
+                      >
+                        {para}
+                      </p>
+                    ))}
+                  </article>
+                ))}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section
+          aria-labelledby="popular-taka-in-words"
+          className="mt-10 rounded-2xl border border-emerald-100 bg-emerald-50/40 p-6 md:p-8"
+        >
+          <h2
+            id="popular-taka-in-words"
+            className="mb-2 text-xl font-bold text-slate-900"
+          >
+            Popular: taka in words (programmatic pages)
+          </h2>
+          <p className="mb-4 text-sm text-slate-600">
+            Pre-rendered answers for common searches — “125000 in words”, “50000 taka in words”, “1 crore in words”, etc.
+          </p>
+          <ul className="flex flex-wrap gap-2">
+            {PROGRAMMATIC_HOME_HIGHLIGHTS.map((n) => (
+              <li key={n}>
+                <Link
+                  href={`/taka-in-words/${n}`}
+                  className="inline-block rounded-full border border-emerald-200 bg-white px-3 py-1.5 text-sm font-medium text-emerald-900 hover:border-emerald-400 hover:bg-emerald-50"
+                >
+                  {formatWesternCommaDigits(String(n))} taka in words
+                </Link>
+              </li>
+            ))}
+            <li>
+              <Link
+                href="/taka-in-words/1-crore"
+                className="inline-block rounded-full border border-emerald-200 bg-white px-3 py-1.5 text-sm font-medium text-emerald-900 hover:border-emerald-400 hover:bg-emerald-50"
+              >
+                1 crore in words
+              </Link>
+            </li>
+          </ul>
+        </section>
 
         {/* Features Section */}
         <div className="mt-12 grid gap-6 md:grid-cols-3">
