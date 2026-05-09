@@ -24,6 +24,12 @@ import {
 } from "@/lib/currencyConverter";
 import { formatCurrencyDisplay, formatWesternComma, formatBanglaCommaBnDigits } from "@/lib/banglaFormatter";
 import { convertTextToNumber } from "@/lib/reverseConverter";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { SEO_FAQ_ITEMS } from "@/lib/faqContent";
 import {
   formatWesternCommaDigits,
@@ -262,7 +268,7 @@ export default function Home() {
               placeholder={
                 mode === "number-to-text"
                   ? "e.g., 11165500.56 or ১১১৬৫৫০০.৫৬"
-                  : "e.g., One Lac Seven Thousand Three Hundred Fifty Taka"
+                  : "e.g., One Lac Seven Thousand Three Hundred Fifty Taka only"
               }
               className="flex-1 rounded-lg border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
             />
@@ -423,37 +429,47 @@ export default function Home() {
           </>
         )}
 
-        {/* Visible FAQ — Banglish + BN intent; wording synced with FAQ JSON-LD */}
+        {/* Visible FAQ — accordion; wording synced with FAQ JSON-LD */}
         <section
           id="faq"
-          aria-labelledby="faq-a11y-title"
+          aria-labelledby="faq-heading"
           className="mt-16 scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-8 shadow-sm md:p-10"
         >
-          <p id="faq-a11y-title" className="sr-only">
+          <h2
+            id="faq-heading"
+            className="mb-2 text-2xl font-bold tracking-tight text-slate-900"
+          >
+            সাধারণ প্রশ্ন / FAQ
+          </h2>
+          <p className="mb-6 text-sm leading-relaxed text-slate-600">
             Short answers for search and AI overviews — taka in words, cheque lekhar
-            niyom, amount to words BD
+            niyom, amount to words BD.
           </p>
-          <div className="space-y-10">
-            {SEO_FAQ_ITEMS.map((item) => (
-              <div key={item.schema.question} className="space-y-8">
-                {item.blocks.map((block) => (
-                  <article key={block.heading}>
-                    <h2 className="mb-3 text-xl font-semibold leading-snug text-slate-900 md:text-2xl">
+          <Accordion
+            type="multiple"
+            defaultValue={["faq-0-0"]}
+            className="w-full border border-slate-100 rounded-xl px-4 md:px-6 bg-slate-50/50"
+          >
+            {SEO_FAQ_ITEMS.flatMap((item, ii) =>
+              item.blocks.map((block, bi) => {
+                const value = `faq-${ii}-${bi}`;
+                return (
+                  <AccordionItem key={value} value={value} className="border-slate-200">
+                    <AccordionTrigger className="py-5 text-left text-base font-semibold leading-snug text-slate-900 hover:text-emerald-800 hover:no-underline md:text-lg data-[state=open]:text-emerald-800">
                       {block.heading}
-                    </h2>
-                    {block.paragraphs.map((para, pi) => (
-                      <p
-                        key={pi}
-                        className="mb-3 text-base leading-relaxed text-slate-700 last:mb-0"
-                      >
-                        {para}
-                      </p>
-                    ))}
-                  </article>
-                ))}
-              </div>
-            ))}
-          </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="text-base leading-relaxed text-slate-700 pt-0 pb-5">
+                      {block.paragraphs.map((para, pi) => (
+                        <p key={pi} className="mb-3 last:mb-0">
+                          {para}
+                        </p>
+                      ))}
+                    </AccordionContent>
+                  </AccordionItem>
+                );
+              }),
+            )}
+          </Accordion>
         </section>
 
         <section

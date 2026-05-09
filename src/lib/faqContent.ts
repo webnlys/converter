@@ -17,13 +17,13 @@ export const SEO_FAQ_ITEMS: FaqItem[] = [
     schema: {
       question: "How do you write 125000 in words?",
       answer:
-        "125000 in words is One Lakh Twenty Five Thousand Taka.",
+        "125000 in words is One Lakh Twenty Five Thousand Taka only.",
     },
     blocks: [
       {
         heading: "How do you write 125000 in words?",
         paragraphs: [
-          "125000 in words is One Lakh Twenty Five Thousand Taka.",
+          "125000 in words is One Lakh Twenty Five Thousand Taka only.",
         ],
       },
     ],
@@ -32,13 +32,13 @@ export const SEO_FAQ_ITEMS: FaqItem[] = [
     schema: {
       question: "১২৫০০০ সংখ্যাটি কথায় কীভাবে লেখা হয়?",
       answer:
-        "১২৫০০০ ইংরেজিতে One Lakh Twenty Five Thousand Taka এবং বাংলায় এক লাখ পঁচিশ হাজার টাকা মাত্র।",
+        "১২৫০০০ ইংরেজিতে One Lakh Twenty Five Thousand Taka only এবং বাংলায় এক লাখ পঁচিশ হাজার টাকা মাত্র।",
     },
     blocks: [
       {
         heading: "১২৫০০০ সংখ্যাটি কথায় কীভাবে লেখা হয়?",
         paragraphs: [
-          "১২৫০০০ ইংরেজিতে One Lakh Twenty Five Thousand Taka এবং বাংলায় এক লাখ পঁচিশ হাজার টাকা মাত্র।",
+          "১২৫০০০ ইংরেজিতে One Lakh Twenty Five Thousand Taka only এবং বাংলায় এক লাখ পঁচিশ হাজার টাকা মাত্র।",
         ],
       },
     ],
@@ -47,14 +47,14 @@ export const SEO_FAQ_ITEMS: FaqItem[] = [
     schema: {
       question: "Taka in words / amount to words BD — what does it mean?",
       answer:
-        "These mean turning a Bangladesh Taka figure into English (and often Bangla) words using lac/crore style. Enter the amount here to copy wording—e.g. 125000 → One Lakh Twenty Five Thousand Taka.",
+        "These mean turning a Bangladesh Taka figure into English (and often Bangla) words using lac/crore style. Enter the amount here to copy wording—e.g. 125000 → One Lakh Twenty Five Thousand Taka only.",
     },
     blocks: [
       {
         heading: "Taka in words / amount to words BD",
         paragraphs: [
           "Direct definition: \"taka in words\" and \"amount to words bd\" mean the same job—convert BDT figures into cheque-style wording for Bangladesh.",
-          "Example: 125000 → One Lakh Twenty Five Thousand Taka (English); এক লাখ পঁচিশ হাজার টাকা মাত্র (Bangla). Paste any valid amount above and copy both lines.",
+          "Example: 125000 → One Lakh Twenty Five Thousand Taka only (English); এক লাখ পঁচিশ হাজার টাকা মাত্র (Bangla). Paste any valid amount above and copy both lines.",
         ],
       },
     ],
@@ -69,7 +69,7 @@ export const SEO_FAQ_ITEMS: FaqItem[] = [
       {
         heading: "চেকে টাকার পরিমাণ লেখার নিয়ম",
         paragraphs: [
-          "চেক ও ব্যাংক ফরমে টাকা প্রায়ই ইংরেজিতে কথায় লেখা হয় (যেমন One Lac Twenty Five Thousand Taka)। একই পরিমাণ বাংলায়ও দেখতে চাইলে এখান থেকে বাংলা লাইন কপি করে রাখুন।",
+          "চেক ও ব্যাংক ফরমে টাকা প্রায়ই ইংরেজিতে কথায় লেখা হয় (যেমন One Lac Twenty Five Thousand Taka only)। একই পরিমাণ বাংলায়ও দেখতে চাইলে এখান থেকে বাংলা লাইন কপি করে রাখুন।",
         ],
       },
     ],

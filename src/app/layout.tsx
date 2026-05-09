@@ -15,7 +15,6 @@ const description =
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  icons: { icon: "/favicon.ico" },
   title: {
     default: title,
     template: "%s | Bangla In Words Converter",

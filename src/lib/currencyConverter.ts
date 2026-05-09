@@ -416,6 +416,8 @@ export function convertToEnglish(parsed: ParsedCurrency): string {
     result += convertHundredsToEnglish(paisa) + " Paisa";
   }
 
+  if (result) result += " only";
+
   return result.trim();
 }
 

@@ -3,7 +3,7 @@
  * Converts Bangla Taka words (English or Bangla) back to numeric format
  * 
  * Example:
- * "One Lac Seven Thousand Three Hundred Fifty Taka" → 107350
+ * "One Lac Seven Thousand Three Hundred Fifty Taka only" → 107350
  * "এক লাখ সাত হাজার তিনশত পঞ্চাশ টাকা" → 107350
  */
 
