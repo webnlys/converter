@@ -7,6 +7,8 @@
  * "এক লাখ সাত হাজার তিনশত পঞ্চাশ টাকা" → 107350
  */
 
+import { banglaCompound1To99 } from "./currencyConverter";
+
 // English words to number mapping
 const englishWordMap: { [key: string]: number } = {
   // Ones
@@ -49,8 +51,6 @@ const englishWordMap: { [key: string]: number } = {
   lac: 100000,
   lakh: 100000,
   crore: 10000000,
-  taka: 1,
-  paisa: 0.01,
 };
 
 // Bangla words to number mapping
@@ -95,8 +95,6 @@ const banglaWordMap: { [key: string]: number } = {
   হাজার: 1000,
   লাখ: 100000,
   কোটি: 10000000,
-  টাকা: 1,
-  পয়সা: 0.01,
 
   // Compound hundreds (for cases like "তিনশত" instead of "তিন শত")
   একশত: 100,
@@ -109,6 +107,15 @@ const banglaWordMap: { [key: string]: number } = {
   আটশত: 800,
   নয়শত: 900,
 };
+
+// The forward converter renders 20–99 as single compound words (e.g. তিরানব্বই = 93,
+// পঁচিশ = 25) rather than "tens ones". Register them so the reverse parser recognizes
+// them too, instead of silently skipping them as unknown words.
+banglaCompound1To99.forEach((word, value) => {
+  if (word && !(word in banglaWordMap)) {
+    banglaWordMap[word] = value;
+  }
+});
 
 /** Compound hundreds like তিনশত (300): add atomically; do not treat as শত multiplier. */
 const BANGLA_ATOMIC_HUNDREDS = new Set([
@@ -124,45 +131,27 @@ const BANGLA_ATOMIC_HUNDREDS = new Set([
 ]);
 
 /**
- * Parse English text to number with correct scale handling
- * Example: "One Lac Seven Thousand Three Hundred Fifty" → 107350
- * 
- * Algorithm:
- * 1. Parse words into a list of numbers
- * 2. Apply scales (hundred, thousand, lac, crore) correctly
- * 3. Handle the Indian numbering system properly
+ * Sum a run of words into a scaled integer (hundred/thousand/lac/crore multipliers).
+ * Shared by the taka portion and the paisa portion of both parsers.
  */
-export function parseEnglishText(text: string): number | null {
-  if (!text || text.trim().length === 0) return null;
-
-  // Clean up text - remove currency words first, then normalize spaces
-  let cleanText = text
-    .toLowerCase()
-    .replace(/\band\b/g, " ")  // Replace word boundary 'and' only
-    .replace(/\s+/g, " ")
-    .trim();
-
-  // Remove currency words
-  cleanText = cleanText
-    .replace(/\btaka\b/g, " ")
-    .replace(/\bpaisa\b/g, " ")
-    .replace(/\bmatra\b/g, " ")
-    .replace(/\bonly\b/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  const words = cleanText.split(/\s+/).filter((w) => w.length > 0);
-
-  if (words.length === 0) return null;
-
+function computeScaleValue(
+  words: string[],
+  wordMap: { [key: string]: number },
+  atomicHundreds?: Set<string>
+): number {
   let result = 0;
   let current = 0;
 
   for (const word of words) {
-    const value = englishWordMap[word];
+    const value = wordMap[word];
 
     if (value === undefined) {
       // Unknown word, skip
+      continue;
+    }
+
+    if (atomicHundreds?.has(word)) {
+      current += value;
       continue;
     }
 
@@ -194,79 +183,102 @@ export function parseEnglishText(text: string): number | null {
   // Add any remaining current value
   result += current;
 
-  return result > 0 ? result : null;
+  return result;
+}
+
+/**
+ * Parse English text to number with correct scale handling
+ * Example: "One Lac Seven Thousand Three Hundred Fifty" → 107350
+ * "One Hundred Taka and Fifty Paisa Only" → 100.5
+ *
+ * Algorithm:
+ * 1. Split the text on the "taka" / "paisa" markers so paisa words are
+ *    parsed as their own (0–99) value instead of folding into the taka total
+ * 2. Apply scales (hundred, thousand, lac, crore) correctly on the taka portion
+ * 3. Combine as taka + paisa/100
+ */
+export function parseEnglishText(text: string): number | null {
+  if (!text || text.trim().length === 0) return null;
+
+  // Normalize; keep "taka"/"paisa" as markers, only strip pure filler words
+  const cleanText = text
+    .toLowerCase()
+    .replace(/\band\b/g, " ")
+    .replace(/\bonly\b/g, " ")
+    .replace(/\bmatra\b/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  const words = cleanText.split(/\s+/).filter((w) => w.length > 0);
+  if (words.length === 0) return null;
+
+  const takaIdx = words.indexOf("taka");
+  const paisaIdx = words.indexOf("paisa");
+
+  let takaWords: string[];
+  let paisaWords: string[];
+
+  if (takaIdx !== -1) {
+    takaWords = words.slice(0, takaIdx);
+    paisaWords = paisaIdx !== -1 && paisaIdx > takaIdx ? words.slice(takaIdx + 1, paisaIdx) : [];
+  } else if (paisaIdx !== -1) {
+    // No "taka" marker, but a "paisa" one (e.g. "Five Paisa only") - it's paisa-only
+    takaWords = [];
+    paisaWords = words.slice(0, paisaIdx);
+  } else {
+    takaWords = words;
+    paisaWords = [];
+  }
+
+  const takaValue = computeScaleValue(takaWords, englishWordMap);
+  const paisaValue = computeScaleValue(paisaWords, englishWordMap);
+
+  if (takaValue === 0 && paisaValue === 0) return null;
+
+  return paisaValue > 0 ? takaValue + paisaValue / 100 : takaValue;
 }
 
 /**
  * Parse Bangla text to number with correct scale handling
  * Example: "এক লাখ সাত হাজার তিনশত পঞ্চাশ" → 107350
+ * "একশত টাকা এবং পঞ্চাশ পয়সা মাত্র" → 100.5
  */
 export function parseBanglaText(text: string): number | null {
   if (!text || text.trim().length === 0) return null;
 
-  // Clean up text - remove currency words first, then normalize spaces
-  let cleanText = text
+  // Normalize; keep "টাকা"/"পয়সা" as markers, only strip pure filler words
+  const cleanText = text
     .replace(/এবং/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  // Remove currency words
-  cleanText = cleanText
-    .replace(/টাকা/g, " ")
-    .replace(/পয়সা/g, " ")
     .replace(/মাত্র/g, " ")
     .replace(/\s+/g, " ")
     .trim();
 
   const words = cleanText.split(/\s+/).filter((w) => w.length > 0);
-
   if (words.length === 0) return null;
 
-  let result = 0;
-  let current = 0;
+  const takaIdx = words.indexOf("টাকা");
+  const paisaIdx = words.indexOf("পয়সা");
 
-  for (const word of words) {
-    const value = banglaWordMap[word];
+  let takaWords: string[];
+  let paisaWords: string[];
 
-    if (value === undefined) {
-      // Unknown word, skip
-      continue;
-    }
-
-    if (BANGLA_ATOMIC_HUNDREDS.has(word)) {
-      current += value;
-      continue;
-    }
-
-    // Handle different scale levels
-    if (value < 100) {
-      // Ones, teens, tens - add to current
-      current += value;
-    } else if (value === 100) {
-      // Hundred - multiply current
-      current *= 100;
-    } else if (value === 1000) {
-      // Thousand - multiply current and add to result
-      current *= 1000;
-      result += current;
-      current = 0;
-    } else if (value === 100000) {
-      // Lac/Lakh - multiply current and add to result
-      current *= 100000;
-      result += current;
-      current = 0;
-    } else if (value === 10000000) {
-      // Crore - multiply current and add to result
-      current *= 10000000;
-      result += current;
-      current = 0;
-    }
+  if (takaIdx !== -1) {
+    takaWords = words.slice(0, takaIdx);
+    paisaWords = paisaIdx !== -1 && paisaIdx > takaIdx ? words.slice(takaIdx + 1, paisaIdx) : [];
+  } else if (paisaIdx !== -1) {
+    takaWords = [];
+    paisaWords = words.slice(0, paisaIdx);
+  } else {
+    takaWords = words;
+    paisaWords = [];
   }
 
-  // Add any remaining current value
-  result += current;
+  const takaValue = computeScaleValue(takaWords, banglaWordMap, BANGLA_ATOMIC_HUNDREDS);
+  const paisaValue = computeScaleValue(paisaWords, banglaWordMap, BANGLA_ATOMIC_HUNDREDS);
 
-  return result > 0 ? result : null;
+  if (takaValue === 0 && paisaValue === 0) return null;
+
+  return paisaValue > 0 ? takaValue + paisaValue / 100 : takaValue;
 }
 
 /**

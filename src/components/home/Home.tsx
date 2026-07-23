@@ -212,7 +212,11 @@ export default function Home() {
           </h3> 
            
           <p className="text-lg text-slate-600">
-            যেকোনো পরিমাণ ইংরেজি ও বাংলায় কথায়—লক্ষ–কোটি–পয়সা ফরম্যাট ও  কপি করুন এক ক্লিকে
+            যেকোনো পরিমাণ ইংরেজি ও বাংলায় কথায়—লক্ষ–কোটি–পয়সা ফরম্যাট ও কপি করুন এক ক্লিকে
+          </p>
+          <p className="mx-auto mt-2 max-w-2xl text-sm text-slate-500">
+            Free online tool for cheque amounts, invoices, and legal documents — supports both
+            number-to-words and words-to-number conversion for Bangladesh Taka.
           </p>
         </div>
 
@@ -483,7 +487,7 @@ export default function Home() {
             Popular: taka in words (programmatic pages)
           </h2>
           <p className="mb-4 text-sm text-slate-600">
-            Pre-rendered answers for common searches — “125000 in words”, “50000 taka in words”, “1 crore in words”, etc.
+            Pre-rendered answers for common searches — “125000 in words”, “50000 taka in words”, “1 crore in words”, and more. Each page shows the exact English and Bangla wording, ready to copy for cheques or forms.
           </p>
           <ul className="flex flex-wrap gap-2">
             {PROGRAMMATIC_HOME_HIGHLIGHTS.map((n) => (
@@ -512,17 +516,23 @@ export default function Home() {
           <div className="rounded-lg border border-slate-200 bg-white p-6 text-center">
             <div className="mb-3 text-3xl">⚡</div>
             <h3 className="mb-2 font-bold text-slate-900">Instant</h3>
-            <p className="text-sm text-slate-600">Real-time conversion</p>
+            <p className="text-sm text-slate-600">
+              Results update as you type — no page reload, no waiting.
+            </p>
           </div>
           <div className="rounded-lg border border-slate-200 bg-white p-6 text-center">
             <div className="mb-3 text-3xl">✓</div>
             <h3 className="mb-2 font-bold text-slate-900">Accurate</h3>
-            <p className="text-sm text-slate-600">Precise calculations</p>
+            <p className="text-sm text-slate-600">
+              Correct lakh/crore grouping and paisa handling for large amounts.
+            </p>
           </div>
           <div className="rounded-lg border border-slate-200 bg-white p-6 text-center">
             <div className="mb-3 text-3xl">🌐</div>
             <h3 className="mb-2 font-bold text-slate-900">Bilingual</h3>
-            <p className="text-sm text-slate-600">English & Bangla</p>
+            <p className="text-sm text-slate-600">
+              Get both English and Bangla wording for every amount, side by side.
+            </p>
           </div>
         </div>
       </main>
@@ -531,7 +541,7 @@ export default function Home() {
       <footer className="relative z-10 border-t border-slate-200 bg-white/80 backdrop-blur-sm py-6 mt-12">
         <div className="container mx-auto px-4 text-center">
           <p className="text-sm text-slate-600">
-            Bangla In Words Converter • সংখ্যা ↔ কথায়  রূপান্তর • 
+            Bangla In Words Converter — free taka-to-words tool for cheques, invoices, and forms • সংখ্যা ↔ কথায় রূপান্তর •{" "}
             <span>
               Designed and Developed by <a href="https://webnlys.com" target="_blank" rel="noopener noreferrer" className="text-emerald-600">Webnlys.com</a>
             </span>

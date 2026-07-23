@@ -70,7 +70,7 @@ const banglaOnes = [
  * Bengali compound names for 1–99 (used for পয়সা; e.g. 45 → পঁয়তাল্লিশ, not চল্লিশ পাঁচ).
  * Index matches the number.
  */
-const banglaCompound1To99: string[] = [
+export const banglaCompound1To99: string[] = [
   "",
   "এক",
   "দুই",
